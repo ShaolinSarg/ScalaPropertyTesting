@@ -1,5 +1,5 @@
-val scalaTest = "org.scalatest" %% "scalatest" % "latest.integration" % Test
-val scalaCheck = "org.scalacheck" %% "scalacheck" % "latest.integration" % Test
+val scalaTest = "org.scalatest" %% "scalatest" % "2.2.5" % Test
+val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.12.6" % Test
 val playJson = "com.typesafe.play" %% "play-json" % "2.3.0"
 
 resolvers += "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
