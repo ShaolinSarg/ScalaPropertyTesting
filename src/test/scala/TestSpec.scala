@@ -1,7 +1,7 @@
 import org.scalacheck.Gen
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FunSpec, Matchers}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 class TestSpec extends FunSpec with Matchers with GeneratorDrivenPropertyChecks {
 
@@ -16,9 +16,9 @@ class TestSpec extends FunSpec with Matchers with GeneratorDrivenPropertyChecks 
     case _ => input * 2
   }
 
-	describe("Property bases testing") {
+	describe("Property based testing") {
 		describe("can use built in type generators") {
-			it ("should generate me a integers as input for my function and give me back the outputs") {
+			ignore ("should generate me a integers as input for my function and give me back the outputs") {
 
         forAll("inputNumber") { (n: Int) =>
 
@@ -36,7 +36,7 @@ class TestSpec extends FunSpec with Matchers with GeneratorDrivenPropertyChecks 
 				
 				val evenInts = for (n <- Gen.choose(-1000, 1000)) yield 2 * n
 
-				forAll((evenInts, "inputNumber")) { (n: Int) =>
+				forAll(evenInts) { (n: Int) =>
 
           whenever (n > 1000 && n < 2001) {
           	val result = myDoublingFunction(n)
@@ -50,7 +50,7 @@ class TestSpec extends FunSpec with Matchers with GeneratorDrivenPropertyChecks 
     describe("you can also create you own generator to create your own types") {
       it("should generate people with different details") {
 
-        val genPerson = for {
+        val genPerson: Gen[Person] = for {
           forename <- Gen.oneOf("Dave", "Suzi", "Steve", "Dan", "Miffy")
           surname <- Gen.alphaStr
           age <- Gen.chooseNum(18, 80)
@@ -62,7 +62,7 @@ class TestSpec extends FunSpec with Matchers with GeneratorDrivenPropertyChecks 
             val result = person.fullName
             println(person)
             result shouldBe person.forename + " " + person.surname
-            result.trim.length shouldBe (person.forename + " " + person.surname).length //uncomment this to see the error case
+            //result.trim.length shouldBe (person.forename + " " + person.surname).length //uncomment this to see the error case
           }
         }
 
@@ -78,6 +78,11 @@ class TestSpec extends FunSpec with Matchers with GeneratorDrivenPropertyChecks 
           "surname" -> surname,
           "age" -> age
         )
+
+        forAll((genPerson, "person")) { (person: JsValue) =>
+          println(person.toString())
+        }
+
 
       }
     }
